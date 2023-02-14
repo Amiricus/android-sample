@@ -16,8 +16,6 @@ import org.junit.runner.RunWith
 
 const val SETTINGS_PACKAGE = "com.android.settings"
 const val MODEL_PACKAGE = "ru.netology.testing.uiautomator"
-const val KEY_EXTRA_MESSAGE = "testing_message"
-
 const val TIMEOUT = 5000L
 
 @RunWith(AndroidJUnit4::class)
@@ -28,59 +26,12 @@ class ChangeTextTest {
     private val str = ""
     private val firstText = "Hello UiAutomator!"
 
-//    @Test
-//    fun testInternetSettings() {
-//        // Press home
-//        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-//        device.pressHome()
-//
-//        // Wait for launcher
-//        val launcherPackage = device.launcherPackageName
-//        device.wait(Until.hasObject(By.pkg(launcherPackage)), TIMEOUT)
-//        waitForPackage(SETTINGS_PACKAGE)
-//
-//        val context = ApplicationProvider.getApplicationContext<Context>()
-//        val intent = context.packageManager.getLaunchIntentForPackage(SETTINGS_PACKAGE)
-//        context.startActivity(intent)
-//        device.wait(Until.hasObject(By.pkg(SETTINGS_PACKAGE)), TIMEOUT)
-//
-//        device.findObject(
-//            UiSelector().resourceId("android:id/title").instance(0)
-//        ).click()
-//    }
-
-//    @Test
-//    fun testChangeText() {
-//        // Press home
-//        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-//        device.pressHome()
-//
-//        // Wait for launcher
-//        val launcherPackage = device.launcherPackageName
-//        device.wait(Until.hasObject(By.pkg(launcherPackage)), TIMEOUT)
-//        waitForPackage(SETTINGS_PACKAGE)
-//
-//        val context = ApplicationProvider.getApplicationContext<Context>()
-//        val packageName = context.packageName
-//        val intent = context.packageManager.getLaunchIntentForPackage(packageName)
-//        context.startActivity(intent)
-//        device.wait(Until.hasObject(By.pkg(packageName)), TIMEOUT)
-//
-//
-//        device.findObject(By.res(packageName, "userInput")).text = textToSet
-//        device.findObject(By.res(packageName, "buttonChange")).click()
-//
-//        val result = device.findObject(By.res(packageName, "textToBeChanged")).text
-//        assertEquals(result, textToSet)
-//    }
-
     private fun waitForPackage(packageName: String) {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val intent = context.packageManager.getLaunchIntentForPackage(packageName)
         context.startActivity(intent)
         device.wait(Until.hasObject(By.pkg(packageName)), TIMEOUT)
     }
-
     @Before
     fun beforeEachTest() {
         // Press home
@@ -91,7 +42,6 @@ class ChangeTextTest {
         val launcherPackage = device.launcherPackageName
         device.wait(Until.hasObject(By.pkg(launcherPackage)), TIMEOUT)
     }
-
     @Test
     fun testInternetSettings() {
         waitForPackage(SETTINGS_PACKAGE)
@@ -100,7 +50,6 @@ class ChangeTextTest {
             UiSelector().resourceId("android:id/title").instance(0)
         ).click()
     }
-
     @Test
     fun testChangeText() {
         val packageName = MODEL_PACKAGE
@@ -125,14 +74,15 @@ class ChangeTextTest {
     }
     @Test
     fun testChangeTextOnNewActivity() {
-        waitForPackage(MODEL_PACKAGE)
+        val packageName = MODEL_PACKAGE
+        waitForPackage(packageName)
 
-        device.findObject(By.res(MODEL_PACKAGE, "userInput")).text = textToSet
-        device.findObject(By.res(MODEL_PACKAGE, "buttonActivity")).click()
+        device.findObject(By.res(packageName, "userInput")).text = textToSet
+        device.findObject(By.res(packageName, "buttonActivity")).click()
 
-        device.wait(Until.hasObject(By.pkg(KEY_EXTRA_MESSAGE)), TIMEOUT)
+        device.wait(Until.hasObject(By.pkg(packageName)), TIMEOUT)
 
-        val result = device.findObject(By.res(KEY_EXTRA_MESSAGE, "text")).text
+        val result = device.findObject(By.res(packageName, "text")).text
         assertEquals(result, textToSet)
     }
 }
